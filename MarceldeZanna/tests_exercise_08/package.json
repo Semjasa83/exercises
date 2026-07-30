@@ -1,0 +1,11 @@
+{
+  "name": "isolating-dependencies-exercise",
+  "version": "1.0.0",
+  "description": "Exercise: Isolating dependencies with Test Doubles",
+  "scripts": {
+    "test": "jest"
+  },
+  "devDependencies": {
+    "jest": "^29.7.0"
+  }
+}
