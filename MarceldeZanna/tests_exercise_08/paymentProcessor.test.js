@@ -34,7 +34,9 @@ describe('PaymentProcessor', () => {
         amount: 500,
         currency: 'EUR',
         source: 'tok_visa'
-      })
+      });
+      expect(result.amount).toBe(500);
+expect(result.status).toBe('completed');
     });
 
     test('Zero amount throws error', async () => {
@@ -48,8 +50,7 @@ describe('PaymentProcessor', () => {
         currency: 'EUR',
         token: 'tok_visa'
       })).rejects.toThrow('Invalid amount')
-
-    })
+    });
 
 
     test('Payment without Token', async () => {
@@ -61,7 +62,7 @@ describe('PaymentProcessor', () => {
       await expect(processor.processPayment({
         amount: 500,
       })).rejects.toThrow('Payment token required')
-    })
+    });
 
     test('decline Card', async () => {
       // TODO: Test for declined card
@@ -71,7 +72,6 @@ describe('PaymentProcessor', () => {
           create: jest.fn().mockRejectedValue(
             new Error('Ihre Karte wurde abgelehnt')
           )
-
         }
       };
       const processor = new PaymentProcessor(fakeStripe);
@@ -84,7 +84,27 @@ describe('PaymentProcessor', () => {
 
       expect(result.success).toBe(false);
       expect(result.error).toBe('Ihre Karte wurde abgelehnt');
-    })
+    });
+
+    test('handles network error', async () => {
+      const fakeStripe = {
+        charges: {
+          create: jest.fn().mockRejectedValue(
+            new Error('Network error')
+          )
+        }
+      };
+      const processor = new PaymentProcessor(fakeStripe);
+
+      const result = await processor.processPayment({
+        amount: 500,
+        token: 'tok_visa',
+        success: false
+      });
+
+      expect(result.success).toBe(false);
+      expect(result.error).toBe('Network error');
+    });
   });
 
   describe('refundPayment()', () => {
