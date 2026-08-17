@@ -1,0 +1,130 @@
+<form id="userForm">
+  <label for="userInput">Text:</label>
+  <!-- type=text um hier eine kleine Einschränkung zu geben-->
+  <input
+    type="text"
+    id="userInput"
+    name="userInput"
+    placeholder="Schreibe etwas..."
+  />
+  <button type="submit">Absenden</button>
+</form>
+
+<div id="output">Deine Eingabe erscheint hier.</div>
+
+<script>
+  const form = document.getElementById("userForm");
+  const input = document.getElementById("userInput");
+  const output = document.getElementById("output");
+
+  form.addEventListener("submit", async (event) => {
+    event.preventDefault();
+
+    const value = input.value.trim();
+
+    if (!value) {
+      output.textContent = "Bitte gib etwas ein.";
+      return;
+    }
+
+    const formData = new URLSearchParams();
+    formData.append("userInput", String(value));
+
+    try {
+      const response = await fetch("/submit", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/x-www-form-urlencoded"
+        },
+        body: formData.toString()
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        output.textContent = data.error || "Ungültige Eingabe";
+        return;
+      }
+
+      output.textContent = data.message;
+    } catch (error) {
+      output.textContent = "Fehler beim Senden.";
+    }
+  });
+</script>
+
+<!-- <!DOCTYPE html>
+<html lang="de">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Formular Übung</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        margin: 40px;
+      }
+
+      form {
+        display: flex;
+        gap: 12px;
+        align-items: center;
+        margin-bottom: 20px;
+      }
+
+      input {
+        padding: 10px;
+        font-size: 16px;
+        width: 250px;
+      }
+
+      button {
+        padding: 10px 16px;
+        font-size: 16px;
+        cursor: pointer;
+      }
+
+      #output {
+        margin-top: 20px;
+        padding: 12px;
+        border: 1px solid #ccc;
+        width: 300px;
+        min-height: 30px;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Formular</h1>
+
+    <form id="userForm">
+      <label for="userInput">Text:</label>
+      <input
+        id="userInput"
+        name="userInput"
+        placeholder="Schreibe etwas..."
+      />
+      <button type="submit">Absenden</button>
+    </form>
+
+    <div id="output">Deine Eingabe erscheint hier.</div>
+
+    <script>
+      const form = document.getElementById("userForm");
+      const input = document.getElementById("userInput");
+      const output = document.getElementById("output");
+
+      form.addEventListener("submit", (event) => {
+        event.preventDefault();
+
+        const value = input.value.trim();
+
+        if (value) {
+          output.innerHTML = "Du hast eingegeben: " + value;
+        } else {
+          output.innerHTML  = "Bitte gib etwas ein.";
+        }
+      });
+    </script>
+  </body>
+</html> -->
+<!-- <img src=x onerror="alert('XSS')"> wurde als XSS ausgeführt-->
