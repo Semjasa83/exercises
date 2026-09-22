@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="de">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Text Verschlüsselung</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+
+  <body>
+    <div class="container">
+      <div class="input-section">
+        <label for="textInput">Text eingeben</label>
+        <input
+          id="textInput"
+          type="text"
+          placeholder="Hier Text eingeben..."
+          autocomplete="off"
+        />
+      </div>
+
+      <div class="output-section">
+        <div class="output-box">
+          <p class="output-label">Text</p>
+          <p id="plainOutput" class="output-text"></p>
+
+          <div class="sub-output">
+            <strong>Verschlüsselt</strong>
+            <p id="encryptedOutput" class="output-text"></p>
+          </div>
+
+          <div class="sub-output">
+            <strong>Entschlüsselt</strong>
+            <p id="decryptedOutput" class="output-text"></p>
+          </div>
+        </div>
+      </div>
+    </div>
+    <script src="script.js"></script>
+  </body>
+</html>
