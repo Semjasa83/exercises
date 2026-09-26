@@ -1,34 +1,42 @@
 const express = require('express');
-const path = require('path');
-const https = require('node:https');
-const fs = require('node:fs')
-// const helmet = require('helmet')
+const fs = require('fs');
+const https = require('https');
+const helmet = require('helmet');
 
 const app = express();
-const port = 3000;
-const httpsPort = 8000
+const httpPort = 3000;
+const httpsPort = 3001;
 
-//keys
 const options = {
   key: fs.readFileSync('key.pem'),
   cert: fs.readFileSync('cert.pem')
 };
 
-//path for html
-app.use(express.static(path.join(__dirname, 'public')));
+app.use((req, res, next) => {
+  if (req.protocol === 'http') {
+    return res.redirect(301, `https://${req.hostname}:${httpsPort}${req.url}`);
+  }
+  next();
+});
+
+app.use(
+  helmet.contentSecurityPolicy({
+    directives: {
+      defaultSrc: ["'self'"],
+      scriptSrc: ["'self'"],
+      objectSrc: ["'none'"]
+    }
+  })
+);
+
 app.get('/', (req, res) => {
-  res.sendFile(path.join(__dirname, 'public', './index.html'));
+  res.send('<h1>Hallo</h1>');
 });
 
-
-
-
-//initalize https server
 https.createServer(options, app).listen(httpsPort, () => {
-  console.log('HTTPS-Server läuft auf https://localhost:8443');
+  console.log(`HTTPS läuft auf https://localhost:${httpsPort}`);
 });
 
-//startet http server
-app.listen(port, () => {
-  console.log(`Server läuft auf http://localhost:${port}`);
+app.listen(httpPort, () => {
+  console.log(`HTTP läuft auf http://localhost:${httpPort}`);
 });
