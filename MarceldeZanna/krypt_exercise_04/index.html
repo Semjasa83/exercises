@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <h1>JWT Token Generator mit Web Crypto API</h1>
+
+    <label for="header">Header:</label>
+    <textarea id="header" rows="2" cols="50">{"alg":"HS256","typ":"JWT"}</textarea><br />
+
+    <label for="payload">Payload:</label>
+    <textarea id="payload" rows="2" cols="50">{"userId":"12345","name":"Max Mustermann"}</textarea><br />
+
+    <button id="generateToken">Generiere JWT Token</button>
+    <p>JWT Token:</p>
+    <textarea id="jwtToken" rows="5" cols="50"></textarea>
+    <script src="script.js"></script>
+</body>
+</html>
